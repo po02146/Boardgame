@@ -1,7 +1,7 @@
 package model;
 
 public class GameBoard {
-	int[][] board;
+	private int[][] board;
 	
 	//게임보드 기본생성자
 	public GameBoard() {
@@ -31,14 +31,30 @@ public class GameBoard {
 				idx_ = 0;
 				//System.out.print(idx_);
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 	
 	//게임보드 배열 출력용
-	public void debugGameBoardSize() {
+	public void debugGameBoard() {
 		for(int i=0;i<this.board.length;i++) {
-			System.out.println(board[i].length);
+			for(int j=0;j<this.board[i].length;j++) {
+				System.out.printf("%2d,%2d ",i,j);
+			}
+			System.out.println();
 		}
 	}
+
+	public boolean isStick(int a, int b, int c, int d) {
+		if(Math.abs(a-c)<=1 && Math.abs(b-d)<=1 && (a-c)*(b-d)>=0) {
+			return true;
+		}
+		return false;
+	}
+	
+	//덩어리 분류
+	
+	//덩어리 별 최대최소값 반환하는 함수
 }
+
+
