@@ -14,6 +14,8 @@ public class Main {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+			//여기고쳐
+			System.out.println("hello");
 	}
 
 }
