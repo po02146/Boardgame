@@ -6,6 +6,7 @@ public class GameBoard {
 	private int[][] board;
 	private int num;
 	private ArrayList<Point> stickedPoint = new ArrayList<Point>();
+	private ArrayList<Point> killList = new ArrayList<Point>();
 
 	// GameBoard Base Constructor = 7
 	public GameBoard() {
@@ -105,6 +106,24 @@ public class GameBoard {
 		return false;
 	}
 
+	public boolean killPoint(int x, int y) {
+		for(int i=0;i<board.length;i++) {
+			for(int j=0;j<board[i].length;j++) {
+				if(board[i][j] != 0) {
+					getStickedPoint(new Point(i,j));
+					for(int k=0;k<stickedPoint.size();k++) {
+						if(board[stickedPoint.get(k).x][stickedPoint.get(k).y] == 0 || board[stickedPoint.get(k).x][stickedPoint.get(k).y] == board[i][j])
+							{
+								killPoint(i,j);
+							}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	public void boardScan() {
 		int idx = 0;
 		for(int i=0;i<board.length;i++) {
@@ -114,8 +133,10 @@ public class GameBoard {
 			}
 		}
 		if(idx == 0) {
-			
+			//게임이 끝났을 때 확인
 		}
+		
+		
 	}
 	
 	//return false if it is preoccupied
