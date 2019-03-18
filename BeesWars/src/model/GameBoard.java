@@ -105,7 +105,18 @@ public class GameBoard {
 		return false;
 	}
 
-	public void boardScan() {}
+	public void boardScan() {
+		int idx = 0;
+		for(int i=0;i<board.length;i++) {
+			for(int j=0;j<board[i].length;j++) {
+				if(board[i][j] == 0)
+					idx++;
+			}
+		}
+		if(idx == 0) {
+			
+		}
+	}
 	
 	//return false if it is preoccupied
 	public boolean pickPoint(int x, int y, int player) {
