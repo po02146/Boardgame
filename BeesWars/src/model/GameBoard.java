@@ -6,6 +6,7 @@ public class GameBoard {
 	private int[][] board;
 	private int num;
 	private ArrayList<Point> stickedPoint = new ArrayList<Point>();
+	private ArrayList<Point> lumpPoint = new ArrayList<Point>();
 
 	// 게임보드 기본생성자 : 기본값 7임
 	public GameBoard() {
@@ -104,6 +105,12 @@ public class GameBoard {
 		return false;
 	}
 
+	public void getLumpPoint() {
+		
+	}
+	
+	public void boardScan() {}
+	
 	// 게임보드 디버그용
 	@Deprecated
 	public void debugGameBoard() {
