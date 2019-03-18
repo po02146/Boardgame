@@ -6,14 +6,13 @@ public class GameBoard {
 	private int[][] board;
 	private int num;
 	private ArrayList<Point> stickedPoint = new ArrayList<Point>();
-	private ArrayList<Point> lumpPoint = new ArrayList<Point>();
 
-	// 게임보드 기본생성자 : 기본값 7임
+	// GameBoard Base Constructor = 7
 	public GameBoard() {
 		this(7);
 	}
 
-	// 게임보드 생성자
+	// GameBoard Constructor
 	public GameBoard(int num) {
 		this.num = num;
 		int idx = 0;
@@ -30,7 +29,7 @@ public class GameBoard {
 		init();
 	}
 
-	// 배열 0으로 초기화
+	// GameBoard Initialize
 	public void init() {
 		for (int[] idx : this.board) {
 			for (int idx_ : idx) {
@@ -39,7 +38,7 @@ public class GameBoard {
 		}
 	}
 
-	// 인접한 행렬 포인트 어레이리스트에 넣음
+	// Put list of Sticked Points into ArrayList
 	private ArrayList<Point> getStickedPoint(Point point) {
 		int x = point.x;
 		int y = point.y;
@@ -89,7 +88,7 @@ public class GameBoard {
 		return stickedPoint;
 	}
 
-	// 인접좌표 출력
+	// Print ArrayList
 	public void printStickedPoint(Point point) {
 		getStickedPoint(new Point(point.x, point.y));
 		for (int i = 0; i < stickedPoint.size(); i++) {
@@ -97,6 +96,7 @@ public class GameBoard {
 		}
 	}
 
+	// Get 2 Points and return isSticked
 	public boolean isStick(Point point, Point point2) {
 		getStickedPoint(point);
 		if (stickedPoint.contains(point2)) {
@@ -105,20 +105,22 @@ public class GameBoard {
 		return false;
 	}
 
-	public void getLumpPoint() {
-		
-	}
-	
 	public void boardScan() {}
 	
-	// 게임보드 디버그용
+	//return false if it is preoccupied
+	public boolean pickPoint(int x, int y, int player) {
+		if(board[x][y] != 0) {
+			board[x][y] = player;
+			return true;
+		}
+		return false;
+	}
+	
+	// for Debug
 	@Deprecated
 	public void debugGameBoard() {
 		System.out.println(isStick(new Point(1, 2), new Point(1, 4)));
 	}
-
-	// 덩어리 분류
-	// 덩어리 별 최대최소값 반환하는 함수
 }
 
 
