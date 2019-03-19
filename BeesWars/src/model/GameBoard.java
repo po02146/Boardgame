@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 public class GameBoard {
 	private int[][] board;
+	private int[][] board_cpy;
 	private int num;
+	private int idx = 0;
 	private ArrayList<Point> stickedPoint = new ArrayList<Point>();
-	private ArrayList<Point> killList = new ArrayList<Point>();
+	private ArrayList<Point> lumpList[] = new ArrayList[50];
 
 	// GameBoard Base Constructor = 7
 	public GameBoard() {
@@ -106,53 +108,45 @@ public class GameBoard {
 		return false;
 	}
 
-	public boolean killPoint(int x, int y) {
-		for(int i=0;i<board.length;i++) {
-			for(int j=0;j<board[i].length;j++) {
-				if(board[i][j] != 0) {
-					getStickedPoint(new Point(i,j));
-					for(int k=0;k<stickedPoint.size();k++) {
-						if(board[stickedPoint.get(k).x][stickedPoint.get(k).y] == 0 || board[stickedPoint.get(k).x][stickedPoint.get(k).y] == board[i][j])
-							{
-								killPoint(i,j);
-							}
-					}
-				}
-			}
+	//호출하는 측에서 idx를 수행해야한다. lumpList초기화도.
+	public void getLump(int x, int y) {
+		getStickedPoint(new Point(x, y));
+		for (int k = 0; k < stickedPoint.size(); k++) {
+			if ((board[stickedPoint.get(k).x][stickedPoint.get(k).y] == 0
+					|| board[stickedPoint.get(k).x][stickedPoint.get(k).y] == board[x][y])&&board[stickedPoint.get(k).x][stickedPoint.get(k).y]<10) {
+				board[x][y] += 10;
+				lumpList[idx].add(new Point(x,y));
+				getLump(stickedPoint.get(k).x,stickedPoint.get(k).y);
+			} 
 		}
-		return false;
 	}
-	
-	
+
 	public void boardScan() {
 		int idx = 0;
-		for(int i=0;i<board.length;i++) {
-			for(int j=0;j<board[i].length;j++) {
-				if(board[i][j] == 0)
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (board[i][j] == 0)
 					idx++;
 			}
 		}
-		if(idx == 0) {
-			//게임이 끝났을 때 확인
+		if (idx == 0) {
+			// 게임이 끝났을 때 확인
 		}
-		
-		
+
 	}
-	
-	//return false if it is preoccupied
+
+	// return false if it is preoccupied
 	public boolean pickPoint(int x, int y, int player) {
-		if(board[x][y] != 0) {
+		if (board[x][y] != 0) {
 			board[x][y] = player;
 			return true;
 		}
 		return false;
 	}
-	
+
 	// for Debug
 	@Deprecated
 	public void debugGameBoard() {
 		System.out.println(isStick(new Point(1, 2), new Point(1, 4)));
 	}
 }
-
-
