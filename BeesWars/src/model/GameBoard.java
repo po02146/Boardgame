@@ -5,19 +5,22 @@ import java.util.ArrayList;
 public class GameBoard {
 	private int[][] board;
 	private int[][] board_cpy;
+	private int player;
 	private int num;
 	private int idx = 0;
+	private int score[];
 	private ArrayList<Point> stickedPoint = new ArrayList<Point>();
 	private ArrayList<Point> lumpList[] = new ArrayList[50];
 
 	// GameBoard Base Constructor = 7
 	public GameBoard() {
-		this(7);
+		this(7,1);
 	}
 
 	// GameBoard Constructor
-	public GameBoard(int num) {
+	public GameBoard(int num, int player) {
 		this.num = num;
+		this.player = player;
 		int idx = 0;
 		int[][] gameBoard = new int[num * 2 - 1][];
 
@@ -29,6 +32,7 @@ public class GameBoard {
 				idx--;
 		}
 		this.board = gameBoard;
+		score = new int[player];
 		init();
 	}
 
@@ -108,33 +112,66 @@ public class GameBoard {
 		return false;
 	}
 
-	//호출하는 측에서 idx를 수행해야한다. lumpList초기화도.
+	//beta
 	public void getLump(int x, int y) {
 		getStickedPoint(new Point(x, y));
 		for (int k = 0; k < stickedPoint.size(); k++) {
 			if ((board[stickedPoint.get(k).x][stickedPoint.get(k).y] == 0
-					|| board[stickedPoint.get(k).x][stickedPoint.get(k).y] == board[x][y])&&board[stickedPoint.get(k).x][stickedPoint.get(k).y]<10) {
+					|| board[stickedPoint.get(k).x][stickedPoint.get(k).y] == board[x][y])
+					&& board[stickedPoint.get(k).x][stickedPoint.get(k).y] < 10) {
 				board[x][y] += 10;
-				lumpList[idx].add(new Point(x,y));
-				getLump(stickedPoint.get(k).x,stickedPoint.get(k).y);
-			} 
-		}
-	}
-
-	public void boardScan() {
-		int idx = 0;
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-				if (board[i][j] == 0)
-					idx++;
+				lumpList[idx].add(new Point(x, y));
+				getLump(stickedPoint.get(k).x, stickedPoint.get(k).y);
 			}
 		}
-		if (idx == 0) {
-			// 게임이 끝났을 때 확인
-		}
-
 	}
 
+	//return gameover
+	public boolean boardScan() {
+		int gameovercounter = 0;
+		idx = 0;
+		
+		for(ArrayList<Point> arr : lumpList) {
+			arr.clear();
+		}
+		
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (board[i][j]%10 == 0)
+					gameovercounter++;
+				else if (board[i][j] < 10) {
+					getLump(i, j);
+					idx++;
+				}
+			}
+		}
+		
+		ScoreCheck();
+		if (gameovercounter == 0) {
+			// 게임이 끝났을 때 확인
+			return true;
+		}
+		return false;
+	}
+
+	private void ScoreCheck() {
+		for(int i : score) {
+			i = 0;
+		}
+		for(int i=0;i<board.length;i++) {
+			for(int j=0;j<board[i].length;j++) {
+				if(board[i][j]%10 != 0) {
+					score[(board[i][j]%10)-1]++;
+				}
+			}
+		}
+	}
+	
+	public int[] getScore() {
+		int[] retnScore = score.clone();
+		return retnScore;
+	}
+	
 	// return false if it is preoccupied
 	public boolean pickPoint(int x, int y, int player) {
 		if (board[x][y] != 0) {
